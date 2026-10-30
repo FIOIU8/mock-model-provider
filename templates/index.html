@@ -8,44 +8,44 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><span class="brand-mark">M</span><div><strong>Mock Provider</strong><small>模型服务测试台</small></div></div>
-    <div class="top-meta"><span class="live-dot"></span><span>服务运行中</span><code>127.0.0.1:8000</code><button class="icon-button" id="theme-toggle" title="切换深色模式" aria-label="切换深色模式">☾</button><button class="icon-button" title="刷新数据" onclick="refreshState()">↻</button></div>
+    <div class="brand"><span class="brand-mark">M</span><div><strong>Mock Provider</strong><small data-i18n="brand.subtitle">模型服务测试台</small></div></div>
+    <div class="top-meta"><span class="live-dot"></span><span data-i18n="service.online">服务运行中</span><code>127.0.0.1:8000</code><div class="language-switch" role="group" aria-label="界面语言"><button type="button" data-language="zh" aria-label="中文">中文</button><button type="button" data-language="en" aria-label="English">EN</button></div><button class="icon-button" id="theme-toggle" title="切换深色模式" aria-label="切换深色模式">☾</button><button class="icon-button" title="刷新数据" aria-label="刷新数据" onclick="refreshState()">↻</button></div>
   </header>
   <main>
     <section class="endpoint-row">
-      <div><span class="eyebrow">OPENAI-COMPATIBLE API</span><h1>测试服务控制台</h1><p>把客户端 Base URL 指向本服务，然后在这里观察请求并控制模型回复。</p></div>
-      <div class="endpoint-box"><span>Base URL</span><code id="base-url">http://127.0.0.1:8000/v1</code><button class="text-button" onclick="copyBaseUrl()">复制</button></div>
+      <div><span class="eyebrow">OPENAI-COMPATIBLE API</span><h1 data-i18n="console.title">测试服务控制台</h1><p data-i18n="console.description">把客户端 Base URL 指向本服务，然后在这里观察请求并控制模型回复。</p></div>
+      <div class="endpoint-box"><span>Base URL</span><code id="base-url">http://127.0.0.1:8000/v1</code><button class="text-button" onclick="copyBaseUrl()" data-i18n="common.copy">复制</button></div>
     </section>
     <section class="summary-grid">
-      <div class="metric"><span>服务状态</span><strong><i class="status-light"></i>在线</strong><small>等待客户端请求</small></div>
-      <div class="metric"><span>待处理请求</span><strong id="pending-count">0</strong><small>手动模式下等待你下发</small></div>
-      <div class="metric"><span>请求记录</span><strong id="request-count">0</strong><small>最多保留最近 100 条</small></div>
-      <div class="metric"><span>API Key</span><strong class="key-value">test-key</strong><small>客户端填写任意兼容 Bearer Key</small></div>
+      <div class="metric"><span data-i18n="summary.service">服务状态</span><strong><i class="status-light"></i><span data-i18n="service.available">在线</span></strong><small data-i18n="summary.waiting">等待客户端请求</small></div>
+      <div class="metric"><span data-i18n="summary.pending">待处理请求</span><strong id="pending-count">0</strong><small data-i18n="summary.pending-help">手动模式下等待你下发</small></div>
+      <div class="metric"><span data-i18n="summary.requests">请求记录</span><strong id="request-count">0</strong><small data-i18n="summary.requests-help">最多保留最近 100 条</small></div>
+      <div class="metric"><span>API Key</span><strong class="key-value">test-key</strong><small data-i18n="summary.key-help">客户端填写任意兼容 Bearer Key</small></div>
     </section>
     <section class="control-layout">
       <div class="settings-panel">
-        <div class="section-heading"><div><span class="eyebrow">RESPONSE BEHAVIOR</span><h2>服务行为</h2></div><span class="saved-indicator" id="save-state">已同步</span></div>
-        <div class="field-block"><label for="mode">响应模式</label><div class="segmented" id="mode-control"><button data-mode="auto">自动回复</button><button data-mode="manual">手动下发</button><button data-mode="tool_call">工具调用</button><button data-mode="error">固定错误</button></div><p class="field-help" id="mode-help">收到请求后返回默认模拟回复。</p></div>
-        <div class="field-block"><label for="delay">自动回复延迟 <span id="delay-label">300 ms</span></label><input id="delay" type="range" min="0" max="10000" step="100" value="300"><div class="range-labels"><span>即时</span><span>10 秒</span></div></div>
-        <div class="field-block"><label for="failure-status">模拟错误</label><div class="inline-fields"><select id="failure-status"><option>400</option><option>401</option><option>429</option><option selected>503</option><option>504</option><option>500</option></select><input id="failure-message" value="Simulated provider error" aria-label="错误消息"></div></div>
-        <div class="field-block"><label>工具调用参数</label><input class="tool-input" id="tool-name" value="get_weather" aria-label="工具名称" placeholder="工具名称"><textarea class="tool-input tool-json" id="tool-arguments" aria-label="工具参数">{"city":"Shanghai","unit":"celsius"}</textarea><input class="tool-input" id="tool-final-text" value="Mock final response after tool result: {tool_result}" aria-label="工具结果后的回复" placeholder="工具结果后的回复模板"><p class="field-help">工具调用模式会返回 `tool_calls`；`{tool_result}` 会替换为客户端回传的工具结果。</p></div>
-        <div class="field-block"><label>可用模型</label><div class="model-row"><span class="model-glyph">AI</span><div><strong>mock-chat</strong><small>通用对话模型</small></div><span class="model-status">可用</span></div><div class="model-row"><span class="model-glyph alt">R</span><div><strong>mock-reasoner</strong><small>推理模型</small></div><span class="model-status">可用</span></div></div>
-        <div class="settings-actions"><button class="primary-button" id="save-settings">保存设置</button><button class="plain-button" id="clear-requests">清空记录</button></div>
+        <div class="section-heading"><div><span class="eyebrow">RESPONSE BEHAVIOR</span><h2 data-i18n="settings.title">服务行为</h2></div><span class="saved-indicator" id="save-state" data-i18n="settings.synced">已同步</span></div>
+        <div class="field-block"><label for="mode-control" data-i18n="settings.mode">响应模式</label><div class="segmented" id="mode-control"><button data-mode="auto" data-i18n="mode.auto">自动回复</button><button data-mode="manual" data-i18n="mode.manual">手动下发</button><button data-mode="tool_call" data-i18n="mode.tool">工具调用</button><button data-mode="error" data-i18n="mode.error">固定错误</button></div><p class="field-help" id="mode-help">收到请求后返回默认模拟回复。</p></div>
+        <div class="field-block"><label for="delay"><span data-i18n="settings.delay">自动回复延迟</span><span id="delay-label">300 ms</span></label><input id="delay" type="range" min="0" max="10000" step="100" value="300"><div class="range-labels"><span data-i18n="settings.instant">即时</span><span data-i18n="settings.ten-seconds">10 秒</span></div></div>
+        <div class="field-block"><label for="failure-status" data-i18n="settings.mock-error">模拟错误</label><div class="inline-fields"><select id="failure-status"><option>400</option><option>401</option><option>429</option><option selected>503</option><option>504</option><option>500</option></select><input id="failure-message" value="Simulated provider error" aria-label="错误消息" data-i18n-attr="aria-label:settings.error-message"></div></div>
+        <div class="field-block"><label for="tool-name" data-i18n="settings.tool-params">工具调用参数</label><input class="tool-input" id="tool-name" value="get_weather" aria-label="工具名称" placeholder="工具名称" data-i18n-attr="aria-label:settings.tool-name;placeholder:settings.tool-name"><textarea class="tool-input tool-json" id="tool-arguments" aria-label="工具参数">{"city":"Shanghai","unit":"celsius"}</textarea><input class="tool-input" id="tool-final-text" value="Mock final response after tool result: {tool_result}" aria-label="工具结果后的回复" placeholder="工具结果后的回复模板" data-i18n-attr="aria-label:settings.final-template;placeholder:settings.final-template"><p class="field-help"><span data-i18n="settings.tool-help-before">工具调用模式会返回</span> <code>tool_calls</code><span data-i18n="settings.tool-help-after">；{tool_result} 会替换为客户端回传的工具结果。</span></p></div>
+        <div class="field-block"><label data-i18n="settings.models">可用模型</label><div class="model-row"><span class="model-glyph">AI</span><div><strong>mock-chat</strong><small data-i18n="model.chat">通用对话模型</small></div><span class="model-status" data-i18n="model.available">可用</span></div><div class="model-row"><span class="model-glyph alt">R</span><div><strong>mock-reasoner</strong><small data-i18n="model.reasoner">推理模型</small></div><span class="model-status" data-i18n="model.available">可用</span></div></div>
+        <div class="settings-actions"><button class="primary-button" id="save-settings" data-i18n="settings.save">保存设置</button><button class="plain-button" id="clear-requests" data-i18n="requests.clear">清空记录</button></div>
       </div>
       <div class="requests-panel">
-        <div class="section-heading request-heading"><div><span class="eyebrow">LIVE TRAFFIC</span><h2>请求队列</h2></div><div class="filter-tabs"><button class="active" data-filter="all">全部</button><button data-filter="pending">待处理 <b id="pending-tab-count">0</b></button></div></div>
-        <div class="request-list" id="request-list"><div class="empty-state"><div class="empty-icon">⇄</div><strong>还没有收到请求</strong><p>从你的客户端发送一次模型请求后，它会出现在这里。</p></div></div>
+        <div class="section-heading request-heading"><div><span class="eyebrow">LIVE TRAFFIC</span><h2 data-i18n="requests.title">请求队列</h2></div><div class="filter-tabs"><button class="active" data-filter="all" data-i18n="requests.all">全部</button><button data-filter="pending"><span data-i18n="requests.pending">待处理</span> <b id="pending-tab-count">0</b></button></div></div>
+        <div class="request-list" id="request-list"><div class="empty-state"><div class="empty-icon">⇄</div><strong data-i18n="requests.empty-title">还没有收到请求</strong><p data-i18n="requests.empty-description">从你的客户端发送一次模型请求后，它会出现在这里。</p></div></div>
       </div>
     </section>
-    <section class="connection-strip"><div class="connection-icon">⌘</div><div><strong>客户端连接参数</strong><span>模型名称可使用 <code>mock-chat</code> 或 <code>mock-reasoner</code>，API Key 使用 <code>test-key</code>。</span></div><button class="plain-button" onclick="copyCurl()">复制测试命令</button></section>
+    <section class="connection-strip"><div class="connection-icon">⌘</div><div><strong data-i18n="connection.title">客户端连接参数</strong><span><span data-i18n="connection.description">模型名称可使用</span> <code>mock-chat</code> <span data-i18n="connection.or">或</span> <code>mock-reasoner</code><span data-i18n="connection.key">，API Key 使用</span> <code>test-key</code><span>。</span></span></div><button class="plain-button" onclick="copyCurl()" data-i18n="connection.copy-command">复制测试命令</button></section>
   </main>
   <div class="conversation-overlay" id="conversation-overlay" aria-hidden="true">
     <section class="conversation-panel" role="dialog" aria-modal="true" aria-labelledby="conversation-title">
-      <header class="conversation-header"><div><span class="eyebrow">REQUEST INSPECTOR</span><h2 id="conversation-title">请求详情</h2></div><button class="icon-button" title="关闭详情" aria-label="关闭详情" onclick="closeConversation()">×</button></header>
+      <header class="conversation-header"><div><span class="eyebrow">REQUEST INSPECTOR</span><h2 id="conversation-title" data-i18n="detail.title">请求详情</h2></div><button class="icon-button" title="关闭详情" aria-label="关闭详情" onclick="closeConversation()" data-i18n-attr="title:detail.close;aria-label:detail.close">×</button></header>
       <div class="conversation-body" id="conversation-content"></div>
     </section>
   </div>
-  <div id="toast" role="status"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>
